@@ -99,39 +99,7 @@ jobs:
           MINIMAX_API_KEYS: ${{ secrets.MINIMAX_API_KEYS }}
           BRAVE_API_KEYS: ${{ secrets.BRAVE_API_KEYS }}
           SEARXNG_BASE_URLS: ${{ secrets.SEARXNG_BASE_URLS }}
-
-          # ... (保持你原有的所有 API KEY 变量不变) ...
           
-          # 【关键修改：彻底屏蔽个人持仓】
-          # 将 STOCK_LIST 设置为无效代码，程序会自动跳过持仓分析
-          STOCK_LIST: '000000' 
-          
-          # 【关键修改：开启荐股功能】
-          # 确保 AI 根据市场热点进行推荐
-          ENABLE_STOCK_RECOMMENDATION: 'true'
-          REPORT_TYPE: 'simple'
-          
-          # 其他变量保持你的原样
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
-          
-        run: |
-          # 判断运行模式
-          MODE="${{ github.event.inputs.mode || 'full' }}"
-          FORCE_RUN_ARG=""
-          [ "${{ github.event.inputs.force_run }}" = "true" ] && FORCE_RUN_ARG="--force-run"
-
-          echo "🚀 执行模式: $MODE"
-          echo "💡 提示：持仓分析已屏蔽，仅进行大盘复盘与热点荐股。"
-
-          # 执行分析（保留原有的逻辑，只需确保环境变量生效）
-          if [ "$MODE" = "market-only" ]; then
-            python main.py --market-review $FORCE_RUN_ARG
-          elif [ "$MODE" = "stocks-only" ]; then
-            python main.py --no-market-review $FORCE_RUN_ARG
-          else
-            python main.py $FORCE_RUN_ARG
-          fi
           # ==========================================
           # 通知渠道（可同时配置多个，全部推送）
           # ==========================================
